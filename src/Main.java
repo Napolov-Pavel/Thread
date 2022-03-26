@@ -1,13 +1,18 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
-        ThreadGroup myGroup = new ThreadGroup("myGroup");
-        System.out.printf("Создаю потоки...\n");
-        new MyThread(myGroup, "1").start();
-        new MyThread(myGroup,"2").start();
-        new MyThread(myGroup, "3").start();
-        new MyThread(myGroup, "4").start();
-        Thread.sleep(15000);
-        System.out.printf("Завершаю потоки.\n");
-        myGroup.interrupt();
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        final ExecutorService threadPool = Executors.newFixedThreadPool(4);
+        List<MyThread> list = new ArrayList<>();
+        list.add(new MyThread("1"));
+        list.add(new MyThread("2"));
+        list.add(new MyThread("3"));
+        list.add(new MyThread("4"));
+        System.out.println(threadPool.invokeAny(list));
+        threadPool.shutdown();
     }
 }

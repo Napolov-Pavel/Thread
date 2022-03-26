@@ -1,19 +1,32 @@
-public class MyThread extends Thread {
-    public MyThread(ThreadGroup group, String name) {
-        super(group, name);
+import java.util.concurrent.Callable;
+
+public class MyThread implements Callable<String> {
+    private String name;
+    private int countMessage;
+
+    public MyThread(String name) {
+        this.name = name;
+    }
+
+    public Integer getCountMessage() {
+        return countMessage;
+    }
+
+    public String getName() {
+        return name;
     }
 
     @Override
-    public void run() {
+    public String call() throws Exception {
         try {
-            while (!isInterrupted()) {
+            for (int i = 0; i < 4; i++) {
                 Thread.sleep(2000);
                 System.out.printf("Я поток %s. Всем привет!\n", getName());
+                countMessage++;
             }
         } catch (InterruptedException e) {
 
-        } finally {
-            System.out.printf("Поток %s завершен\n", getName());
         }
+        return "Самый быстрый поток - " + getName() + ", вывел " + getCountMessage() + " сообщений";
     }
 }
